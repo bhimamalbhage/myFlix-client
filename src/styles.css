@@ -1,0 +1,18 @@
+/* src/styles.css */
+.movie-list {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .movie-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .movie-view img {
+    max-width: 300px;
+    display: block;
+    margin: 10px 0;
+  }
+  
