@@ -42,7 +42,6 @@ MainView.propTypes = {
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
       director: PropTypes.shape({
         name: PropTypes.string.isRequired,
       }).isRequired,

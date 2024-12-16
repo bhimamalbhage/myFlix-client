@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const MovieCard = ({ movie, onClick }) => (
   <div className="movie-card" onClick={onClick} style={{ cursor: "pointer" }}>
     <h2>{movie.title}</h2>
-    <img src={movie.imageUrl} alt={`${movie.title} Poster`} style={{ width: "200px" }} />
+    <img src={movie.imageUrl} alt={`${movie.title} Poster`} style={{ maxWidth: "200px", maxHeight: "200px" }} />
   </div>
 );
 
