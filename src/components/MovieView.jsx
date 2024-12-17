@@ -6,7 +6,7 @@ const MovieView = ({ movie, onBack }) => {
     <div className="movie-view">
       <h1>{movie.title}</h1>
       <img src={movie.imageUrl} alt={`${movie.title} Poster`} style={{ width: "300px" }} />
-      <p><strong>Description:</strong> {movie.genre?.description}</p>
+      <p><strong>Description:</strong> {movie.description}</p>
       <p><strong>Director:</strong> {movie.director.name}</p>
       <p><strong>Genre:</strong> {movie.genre.name}</p>
       <button onClick={onBack}>Back to Main View</button>
