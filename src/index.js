@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import MainView from "./components/MainView";
+import MainView from "./components/main-view/MainView";
 import "./styles.css";
 
 
