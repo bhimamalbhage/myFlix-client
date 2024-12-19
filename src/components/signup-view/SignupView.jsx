@@ -19,6 +19,10 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (formData.username.length < 5) {
+      setError("Username must be at least 5 characters long.");
+      return;
+    }
     axios
       .post("https://movies-flix-bhima-f885454e03b7.herokuapp.com/users", {
         Username: formData.username,
