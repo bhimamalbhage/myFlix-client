@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import "./LoginView.css";
+import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
+import './LoginView.css'
 
 const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
   const [username, setUsername] = useState("");
@@ -27,44 +28,54 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Welcome Back!</h2>
-        <p className="subtitle">Please log in to your account</p>
-        <div className="input-group">
-          <input
-            type="text"
-            className="login-input"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="input-group">
-          <input
-            type="password"
-            className="login-input"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="login-button">
-          Log In
-        </button>
-      </form>
-      <div className="signup-prompt">
-        <p>
-          Don't have an account?{" "}
-          <button type="button" className="signup-button" onClick={onSwitchToSignup}>
-            Sign Up
-          </button>
-        </p>
-      </div>
-    </div>
+    <Container className="mt-5 login-container">
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <h2 className="text-center">Welcome Back!</h2>
+          <p className="text-center">Please log in to your account</p>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="loginUsername" className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="loginPassword" className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Button variant="primary" type="submit" className="w-100">
+              Log In
+            </Button>
+          </Form>
+          <div className="text-center mt-3">
+            <p>
+              Don't have an account?{" "}
+              <Button variant="outline-primary" onClick={onSwitchToSignup}
+               style={{
+                backgroundColor: "#ff5722",
+                color: "#fff",
+                border: "none",
+              }}
+              >
+                Sign Up
+              </Button>
+            </p>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
