@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 
-const MovieCard = ({ movie, onClick }) => (
-  <Card className="movie-card" onClick={onClick} style={{ cursor: "pointer", marginBottom: "20px" }}>
+const MovieCard = ({ movie, onFavorite }) => (
+  <Card className="movie-card"  style={{ cursor: "pointer", marginBottom: "20px" }}>
     <Card.Img 
       variant="top" 
       src={movie.imageUrl} 
@@ -12,6 +12,9 @@ const MovieCard = ({ movie, onClick }) => (
     />
     <Card.Body>
       <Card.Title>{movie.title}</Card.Title>
+      <Button variant="warning" onClick={(e) => { e.preventDefault(); onFavorite(movie._id); }}>
+        Add to Favorites
+      </Button>
     </Card.Body>
   </Card>
 );
@@ -22,7 +25,7 @@ MovieCard.propTypes = {
     title: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
   }).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onFavorite: PropTypes.func.isRequired,
 };
 
 export default MovieCard;

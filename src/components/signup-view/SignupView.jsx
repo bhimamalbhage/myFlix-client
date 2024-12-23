@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
-import './SignupView.css'
+import { Link, useNavigate } from "react-router-dom";
+import './SignupView.css';
 
-const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
+const SignupView = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -12,6 +12,8 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
     birthday: "",
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,10 +34,15 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
         Birthday: formData.birthday,
       })
       .then(() => {
-        onSignedUp();
+        setSuccess(true);
+        setError("");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000); 
       })
       .catch(() => {
         setError("Error signing up. Please try again.");
+        setSuccess(false);
       });
   };
 
@@ -89,6 +96,7 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
               />
             </Form.Group>
             {error && <Alert variant="danger">{error}</Alert>}
+            {success && <Alert variant="success">Sign up successful! Redirecting to login...</Alert>}
             <Button variant="primary" type="submit" className="w-100">
               Sign Up
             </Button>
@@ -96,15 +104,18 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
           <div className="text-center mt-3">
             <p>
               Already have an account?{" "}
-              <Button variant="outline-primary" onClick={onSwitchToLogin}
-              style={{
-                backgroundColor: "#4caf50",
-                color: "#fff",
-                border: "none",
-              }}
-              >
-                Login
-              </Button>
+              <Link to="/login">
+                <Button
+                  variant="outline-primary"
+                  style={{
+                    backgroundColor: "#4caf50",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                >
+                  Login
+                </Button>
+              </Link>
             </p>
           </div>
         </Col>
@@ -113,9 +124,5 @@ const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
   );
 };
 
-SignupView.propTypes = {
-  onSignedUp: PropTypes.func.isRequired,
-  onSwitchToLogin: PropTypes.func.isRequired,
-};
 
 export default SignupView;

@@ -2,25 +2,29 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
-import './LoginView.css'
+import { Link, useNavigate } from "react-router-dom";
+import './LoginView.css';
 
-const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
+const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate(); // Use navigate hook for redirection
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post("https://movies-flix-bhima-f885454e03b7.herokuapp.com/login", {
-        username: username,
-        password: password,
+        username,
+        password,
       })
       .then((response) => {
         const { token, user } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         onLoggedIn(user);
+        navigate("/"); // Redirect to MainView on successful login
       })
       .catch(() => {
         setError("Invalid username or password");
@@ -62,15 +66,18 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
           <div className="text-center mt-3">
             <p>
               Don't have an account?{" "}
-              <Button variant="outline-primary" onClick={onSwitchToSignup}
-               style={{
-                backgroundColor: "#ff5722",
-                color: "#fff",
-                border: "none",
-              }}
-              >
-                Sign Up
-              </Button>
+              <Link to="/signup">
+                <Button
+                  variant="outline-primary"
+                  style={{
+                    backgroundColor: "#ff5722",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </Link>
             </p>
           </div>
         </Col>
@@ -81,7 +88,6 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
 
 LoginView.propTypes = {
   onLoggedIn: PropTypes.func.isRequired,
-  onSwitchToSignup: PropTypes.func.isRequired,
 };
 
 export default LoginView;
