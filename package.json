@@ -40,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.13.3",
+    "parcel": "^2.13.3"
   }
 }
