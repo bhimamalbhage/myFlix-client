@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "parcel build public/index.html --dist-dir build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -40,11 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@parcel/packager-raw-url": "^2.13.3",
-    "@parcel/transformer-sass": "^2.13.3",
-    "@parcel/transformer-webmanifest": "^2.13.3",
-    "parcel": "^2.13.3"
   }
 }
