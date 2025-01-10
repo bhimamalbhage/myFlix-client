@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import NavigationBar from "../navigation-bar/NavigationBar";
 import LoginView from "../login-view/LoginView";
 import SignupView from "../signup-view/SignupView";
@@ -17,6 +17,7 @@ const MainView = () => {
       : null
   );
   const [movies, setMovies] = useState([]);
+  const [filter, setFilter] = useState(""); 
 
   useEffect(() => {
     if (!user) return;
@@ -56,6 +57,10 @@ const MainView = () => {
       });
   };
 
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <Router>
       <NavigationBar user={user} onLogout={handleLogout} />
@@ -66,22 +71,41 @@ const MainView = () => {
             path="/"
             element={
               user ? (
-                <Row>
-                  {movies.map((movie) => (
-                    <Col
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      className="mb-4"
-                      key={movie._id}
-                    >
-                      <Link to={`/movies/${movie._id}`}>
-                        <MovieCard movie={movie} onFavorite={handleAddToFavorites}  />
-                      </Link>
-                    </Col>
-                  ))}
-                </Row>
+                <>
+                  <Form.Group controlId="movieFilter" className="mb-3">
+                    <Form.Label>Filter Movies</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Search by title..."
+                      value={filter}
+                      onChange={(e) => setFilter(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Row>
+                    {filteredMovies.length > 0 ? (
+                      filteredMovies.map((movie) => (
+                        <Col
+                          xs={12}
+                          sm={6}
+                          md={4}
+                          lg={3}
+                          className="mb-4"
+                          key={movie._id}
+                        >
+                          <Link to={`/movies/${movie._id}`}>
+                            <MovieCard
+                              movie={movie}
+                              onFavorite={handleAddToFavorites}
+                            />
+                          </Link>
+                        </Col>
+                      ))
+                    ) : (
+                      <p>No movies found matching the criteria.</p>
+                    )}
+                  </Row>
+                </>
               ) : (
                 <LoginView onLoggedIn={setUser} />
               )
@@ -107,7 +131,6 @@ const MainView = () => {
               )
             }
           />
-
           <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
           <Route path="/signup" element={<SignupView />} />
         </Routes>
