@@ -1,0 +1,84 @@
+.movie-view-container {
+    padding: 30px;
+    background-color: rgba(26, 26, 26, 0.8);
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .movie-poster-container {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .movie-detail-poster {
+    width: 100%;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+  }
+  
+  .movie-detail-poster:hover {
+    transform: scale(1.02);
+  }
+  
+  .movie-details {
+    padding: 0 20px;
+    color: white;
+  }
+  
+  .movie-detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .movie-meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .movie-year, .movie-genre, .movie-director {
+    padding: 5px 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    font-size: 0.9rem;
+  }
+  
+  .movie-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #ddd;
+  }
+  
+  .movie-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .watch-button {
+    background-color: #e50914 !important;
+    border-color: #e50914 !important;
+    padding: 10px 20px !important;
+    font-weight: 500;
+  }
+  
+  .watch-button:hover {
+    background-color: #f40612 !important;
+  }
+  
+  .favorite-button, .back-button {
+    padding: 10px 20px !important;
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+  }

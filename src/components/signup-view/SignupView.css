@@ -1,4 +1,134 @@
+.signup-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #111;
+  }
+  
+  .background-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.1), rgba(0, 0, 0, 0.9));
+    z-index: 1;
+  }
+  
   .signup-container {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .signup-card {
+    background-color: rgba(26, 26, 26, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .brand-logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e50914;
+    margin-bottom: 10px;
+  }
+  
+  .signup-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
     color: #fff;
+  }
+  
+  .signup-subtitle {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 20px;
+  }
+  
+  .signup-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .signup-form .form-label {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .signup-form .input-container {
+    position: relative;
+  }
+  
+  .signup-form .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+  }
+  
+  .signup-form .styled-input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  .signup-form .styled-input:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 2px #e50914;
+  }
+  
+  .signup-form .styled-input::placeholder {
+    color: #aaa;
+  }
+  
+  .signup-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: #e50914;
+    border: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-button:hover {
+    background-color: #f40612;
+  }
+  
+  .login-option {
+    color: #aaa;
+  }
+  
+  .login-link {
+    color: #e50914;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+  }
+  
+  .animated-alert {
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
