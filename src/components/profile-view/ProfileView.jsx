@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Card, Button, Form, Alert, Spinner, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import './ProfileView.css';
 
 const ProfileView = ({ user, movies }) => {
   const [updatedUserData, setUpdatedUserData] = useState({});
@@ -92,11 +93,15 @@ const ProfileView = ({ user, movies }) => {
   };
 
   if (isLoading) {
-    return <Spinner animation="border" role="status" />;
+    return (
+      <div className="loading-container">
+        <Spinner animation="border" role="status" variant="light" />
+      </div>
+    );
   }
 
   if (error) {
-    return <Alert variant="danger">{error}</Alert>;
+    return <Alert variant="danger" className="animated-alert">{error}</Alert>;
   }
 
   if (!user) {
@@ -104,72 +109,107 @@ const ProfileView = ({ user, movies }) => {
   }
 
   return (
-    <div>
-      <Card className="mx-auto" style={{ maxWidth: "600px" }}>
-        <Card.Body>
-          <Card.Title>User Profile</Card.Title>
-          <Form>
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" value={updatedUserData.username} disabled />
-            </Form.Group>
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={updatedUserData.email}
-                onChange={(e) =>
-                  setUpdatedUserData({ ...updatedUserData, email: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="birthday">
-              <Form.Label>Birthday</Form.Label>
-              <Form.Control
-                type="date"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)} // Handle birthday separately
-              />
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Change your password"
-                onChange={(e) =>
-                  setUpdatedUserData({ ...updatedUserData, password: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Button variant="primary" onClick={handleUpdate} className="mt-3">
-              Update Profile
-            </Button>
-            <Button variant="danger" onClick={handleDeregister} className="mt-3" style={{marginLeft:'5px'}}>
-              Deregister
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+    <div className="profile-page">
+      <div className="background-gradient"></div>
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={8} lg={6} className="profile-card">
+            <div className="text-center mb-4">
+              <h1 className="brand-logo">MyFlix</h1>
+              <h2 className="profile-title">User Profile</h2>
+            </div>
 
-      <h3 className="mt-4">Favorite Movies</h3>
-      <div className="movie-cards" style={{ display: "flex" }}>
-        {favoriteMovies.map((movie) => (
-          <Card className="movie-card" key={movie._id} style={{ cursor: "pointer", marginBottom: "20px" }}>
-            <Card.Img
-              variant="top"
-              src={movie.imageUrl}
-              alt={`${movie.title} Poster`}
-              style={{ maxHeight: "200px", objectFit: "contain", backgroundColor: "#f8f9fa" }}
-            />
-            <Card.Body>
-              <Card.Title>{movie.title}</Card.Title>
-              <Button variant="warning" onClick={() => handleRemoveFavorite(movie._id)}>
-                Remove from Favorites
+            <Form className="profile-form">
+              <Form.Group controlId="username" className="mb-3 form-group">
+                <Form.Label className="form-label">Username</Form.Label>
+                <div className="input-container">
+                  <i className="input-icon fas fa-user"></i>
+                  <Form.Control
+                    type="text"
+                    value={updatedUserData.username}
+                    disabled
+                    className="styled-input"
+                  />
+                </div>
+              </Form.Group>
+
+              <Form.Group controlId="email" className="mb-3 form-group">
+                <Form.Label className="form-label">Email</Form.Label>
+                <div className="input-container">
+                  <i className="input-icon fas fa-envelope"></i>
+                  <Form.Control
+                    type="email"
+                    value={updatedUserData.email}
+                    onChange={(e) =>
+                      setUpdatedUserData({ ...updatedUserData, email: e.target.value })
+                    }
+                    className="styled-input"
+                  />
+                </div>
+              </Form.Group>
+
+              <Form.Group controlId="birthday" className="mb-3 form-group">
+                <Form.Label className="form-label">Birthday</Form.Label>
+                <div className="input-container">
+                  <i className="input-icon fas fa-calendar"></i>
+                  <Form.Control
+                    type="date"
+                    value={birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                    className="styled-input"
+                  />
+                </div>
+              </Form.Group>
+
+              <Form.Group controlId="password" className="mb-4 form-group">
+                <Form.Label className="form-label">Password</Form.Label>
+                <div className="input-container">
+                  <i className="input-icon fas fa-lock"></i>
+                  <Form.Control
+                    type="password"
+                    placeholder="Change your password"
+                    onChange={(e) =>
+                      setUpdatedUserData({ ...updatedUserData, password: e.target.value })
+                    }
+                    className="styled-input"
+                  />
+                </div>
+              </Form.Group>
+
+              <Button variant="primary" onClick={handleUpdate} className="update-button">
+                Update Profile
               </Button>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
+              <Button variant="danger" onClick={handleDeregister} className="deregister-button">
+                Deregister
+              </Button>
+            </Form>
+
+            <h3 className="favorite-movies-title">Favorite Movies</h3>
+            <div className="favorite-movies-grid">
+              {favoriteMovies.map((movie) => (
+                <Card key={movie._id} className="favorite-movie-card">
+                  <Card.Img
+                    variant="top"
+                    src={movie.imageUrl}
+                    alt={`${movie.title} Poster`}
+                    className="movie-poster"
+                  />
+                  <Card.Body>
+                    <Card.Title className="movie-title">{movie.title}</Card.Title>
+                    <Button
+                      variant="warning"
+                      onClick={() => handleRemoveFavorite(movie._id)}
+                      className="remove-favorite-button"
+                    >
+                      Remove from Favorites
+                    </Button>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

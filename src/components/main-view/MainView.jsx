@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import NavigationBar from "../navigation-bar/NavigationBar";
 import LoginView from "../login-view/LoginView";
 import SignupView from "../signup-view/SignupView";
@@ -17,21 +17,42 @@ const MainView = () => {
       : null
   );
   const [movies, setMovies] = useState([]);
-  const [filter, setFilter] = useState(""); 
+  const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
+    setLoading(true);
     const token = localStorage.getItem("token");
     axios
       .get("https://movies-flix-bhima-f885454e03b7.herokuapp.com/movies", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setMovies(response.data);
+        const moviesData = response.data;
+        setMovies(moviesData);
+
+        console.log("moviesData", moviesData);
+        
+        // Extract unique genres for category filter
+        const uniqueGenres = [...new Set(
+          moviesData
+            .filter(movie => movie.genre && movie.genre.name)
+            .map(movie => movie.genre.name)
+        )];
+        setCategories(uniqueGenres);
+        
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching movies:", error);
+        setLoading(false);
       });
   }, [user]);
 
@@ -57,84 +78,124 @@ const MainView = () => {
       });
   };
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredMovies = movies.filter((movie) => {
+    // Filter by search text
+    const matchesSearch = movie.title.toLowerCase().includes(filter.toLowerCase());
+    
+    // Filter by category
+    const matchesCategory = 
+      selectedCategory === "All" || 
+      (movie.genre && movie.genre.name === selectedCategory);
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <Router>
-      <NavigationBar user={user} onLogout={handleLogout} />
+      <div className="app-container">
+        <NavigationBar 
+          user={user} 
+          onLogout={handleLogout} 
+          searchValue={filter}
+          onSearchChange={(e) => setFilter(e.target.value)}
+        />
 
-      <Container className="mt-4">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              user ? (
-                <>
-                  <Form.Group controlId="movieFilter" className="mb-3">
-                    <Form.Label>Filter Movies</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Search by title..."
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                    />
-                  </Form.Group>
-
-                  <Row>
-                    {filteredMovies.length > 0 ? (
-                      filteredMovies.map((movie) => (
-                        <Col
-                          xs={12}
-                          sm={6}
-                          md={4}
-                          lg={3}
-                          className="mb-4"
-                          key={movie._id}
+        <Container fluid className="content-container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                user ? (
+                  <>
+                    <div className="hero-section">
+                      <div className="hero-content">
+                        <h1>Welcome to MyFlix</h1>
+                        <p>Discover amazing movies and build your collection</p>
+                      </div>
+                    </div>
+                    
+                    <div className="category-filters">
+                      <button 
+                        className={`category-btn ${selectedCategory === 'All' ? 'active' : ''}`}
+                        onClick={() => setSelectedCategory('All')}
+                      >
+                        All
+                      </button>
+                      {categories.map(category => (
+                        <button 
+                          key={category}
+                          className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                          onClick={() => setSelectedCategory(category)}
                         >
-                          <Link to={`/movies/${movie._id}`}>
-                            <MovieCard
-                              movie={movie}
-                              onFavorite={handleAddToFavorites}
-                            />
-                          </Link>
-                        </Col>
-                      ))
+                          {category}
+                        </button>
+                      ))}
+                    </div>
+
+                    {loading ? (
+                      <div className="loading-container">
+                        <div className="spinner"></div>
+                      </div>
                     ) : (
-                      <p>No movies found matching the criteria.</p>
+                      <Row className="movie-grid">
+                        {filteredMovies.length > 0 ? (
+                          filteredMovies.map((movie) => (
+                            <Col
+                              xs={12}
+                              sm={6}
+                              md={4}
+                              lg={3}
+                              xl={2}
+                              className="movie-col"
+                              key={movie._id}
+                            >
+                              <Link to={`/movies/${movie._id}`} className="movie-link">
+                                <MovieCard
+                                  movie={movie}
+                                  onFavorite={handleAddToFavorites}
+                                />
+                              </Link>
+                            </Col>
+                          ))
+                        ) : (
+                          <div className="no-results">
+                            <i className="fa fa-film"></i>
+                            <p>No movies found matching your criteria.</p>
+                          </div>
+                        )}
+                      </Row>
                     )}
-                  </Row>
-                </>
-              ) : (
-                <LoginView onLoggedIn={setUser} />
-              )
-            }
-          />
-          <Route
-            path="/movies/:movieId"
-            element={
-              user ? (
-                <MovieView movieData={movies} currentUser={user} />
-              ) : (
-                <LoginView onLoggedIn={setUser} />
-              )
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              user ? (
-                <ProfileView user={user} movies={movies} />
-              ) : (
-                <LoginView onLoggedIn={setUser} />
-              )
-            }
-          />
-          <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
-          <Route path="/signup" element={<SignupView />} />
-        </Routes>
-      </Container>
+                  </>
+                ) : (
+                  <LoginView onLoggedIn={setUser} />
+                )
+              }
+            />
+            <Route
+              path="/movies/:movieId"
+              element={
+                user ? (
+                  <MovieView movieData={movies} currentUser={user} />
+                ) : (
+                  <LoginView onLoggedIn={setUser} />
+                )
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                user ? (
+                  <ProfileView user={user} movies={movies} />
+                ) : (
+                  <LoginView onLoggedIn={setUser} />
+                )
+              }
+            />
+            <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
+            <Route path="/signup" element={<SignupView />} />
+          </Routes>
+        </Container>
+      </div>
     </Router>
   );
 };
